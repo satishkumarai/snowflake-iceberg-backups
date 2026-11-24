@@ -48,3 +48,9 @@ All SQL was run in a live AWS account; results and caveats are in [`docs/validat
 - **Don't use** for Iceberg on customer-managed volumes or external catalogs (unsupported — protect at
   the storage/catalog layer), transient tables, or as a replacement for cross-region DR (pair with
   account replication).
+
+⭐ **If you find this project useful, please consider giving it a Star on GitHub!**
+
+Your support helps increase visibility, encourages further development, and motivates me to share more Snowflake open-source projects.
+
+🔗 [Star this repository on GitHub](https://github.com/satishkumarai/snowflake-iceberg-backups)
