@@ -1,0 +1,21 @@
+name: plan
+on:
+  pull_request:
+    paths: ["config/**", "sql/**", "src/**"]
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    strategy: {matrix: {env: [dev, stg, prod]}}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -e .
+      - run: icebackup plan --env ${{ matrix.env }}
+      - name: Flag retention-lock changes for compliance review
+        run: |
+          if grep -rl "WITH RETENTION LOCK" build/${{ matrix.env }}; then
+            echo "::warning::Retention lock in ${{ matrix.env }} plan: IRREVERSIBLE. Requires security+compliance approval."
+          fi
+      - uses: actions/upload-artifact@v4
+        with: {name: "plan-${{ matrix.env }}", path: "build/${{ matrix.env }}"}

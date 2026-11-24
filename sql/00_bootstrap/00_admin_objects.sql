@@ -1,0 +1,7 @@
+-- Dedicated admin DB for policies, sets, monitoring (ADR-0003).
+CREATE DATABASE IF NOT EXISTS ${ADMIN_DB} COMMENT = 'Backup policies, backup sets, monitoring. Do not drop.';
+CREATE SCHEMA IF NOT EXISTS ${ADMIN_DB}.${ADMIN_SCHEMA};
+CREATE SCHEMA IF NOT EXISTS ${ADMIN_DB}.MONITORING;
+CREATE WAREHOUSE IF NOT EXISTS ${WAREHOUSE}
+  WAREHOUSE_SIZE = XSMALL AUTO_SUSPEND = 60 AUTO_RESUME = TRUE INITIALLY_SUSPENDED = TRUE
+  COMMENT = 'Restore verification and monitoring queries';

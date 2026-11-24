@@ -1,0 +1,5 @@
+env: prod
+allow_retention_lock: true
+# Set to the approved change ticket before any locked policy can be applied.
+retention_lock_ack: ""
+targets: []

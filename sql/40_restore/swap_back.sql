@@ -1,0 +1,27 @@
+-- Copy restored data back into the ORIGINAL object so its backup set stays bound (do not rename).
+CREATE OR REPLACE PROCEDURE ${ADMIN_DB}.${ADMIN_SCHEMA}.SWAP_BACK(ORIGINAL VARCHAR, RESTORED VARCHAR)
+RETURNS VARCHAR
+LANGUAGE SQL
+EXECUTE AS CALLER
+AS
+$$
+DECLARE
+  before_cnt NUMBER;
+  after_cnt  NUMBER;
+BEGIN
+  SELECT COUNT(*) INTO :before_cnt FROM IDENTIFIER(:RESTORED);
+  BEGIN TRANSACTION;
+    DELETE FROM IDENTIFIER(:ORIGINAL);
+    INSERT INTO IDENTIFIER(:ORIGINAL) SELECT * FROM IDENTIFIER(:RESTORED);
+  COMMIT;
+  SELECT COUNT(*) INTO :after_cnt FROM IDENTIFIER(:ORIGINAL);
+  IF (before_cnt != after_cnt) THEN
+    RETURN 'MISMATCH restored=' || before_cnt || ' original=' || after_cnt;
+  END IF;
+  RETURN 'OK rows=' || after_cnt;
+EXCEPTION
+  WHEN OTHER THEN
+    ROLLBACK;
+    RAISE;
+END;
+$$;

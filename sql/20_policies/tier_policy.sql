@@ -1,0 +1,5 @@
+-- Rendered once per non-locked tier.
+CREATE BACKUP POLICY IF NOT EXISTS ${ADMIN_DB}.${ADMIN_SCHEMA}.${POLICY_NAME}
+  SCHEDULE = '${SCHEDULE_MINUTES} MINUTE'
+  EXPIRE_AFTER_DAYS = ${EXPIRE_AFTER_DAYS}
+  COMMENT = 'tier=${TIER} managed-by=icebackup';

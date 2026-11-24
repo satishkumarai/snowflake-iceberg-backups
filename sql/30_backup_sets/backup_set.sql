@@ -1,0 +1,7 @@
+-- Rendered once per target. KIND in: ICEBERG TABLE | DYNAMIC ICEBERG TABLE | SCHEMA | DATABASE
+CREATE BACKUP SET IF NOT EXISTS ${ADMIN_DB}.${ADMIN_SCHEMA}.${SET_NAME}
+  FOR ${KIND} ${OBJECT}
+  WITH BACKUP POLICY ${ADMIN_DB}.${ADMIN_SCHEMA}.${POLICY_NAME}
+  COMMENT = 'tier=${TIER} managed-by=icebackup';
+-- Seed an immediate backup so RPO is not "next schedule tick".
+ALTER BACKUP SET ${ADMIN_DB}.${ADMIN_SCHEMA}.${SET_NAME} ADD BACKUP;

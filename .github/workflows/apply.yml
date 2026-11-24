@@ -1,0 +1,22 @@
+name: apply
+on:
+  workflow_dispatch:
+    inputs:
+      env: {description: "dev|stg|prod", required: true}
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.env }}   # prod environment requires 2 reviewers in repo settings
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install -e .
+      - name: Write connection (key-pair auth, service user)
+        run: |
+          mkdir -p ~/.snowflake
+          printf '[ci]\naccount="%s"\nuser="%s"\nauthenticator="SNOWFLAKE_JWT"\nprivate_key_file="%s"\nrole="BACKUP_ADMIN"\n' \
+            "${{ secrets.SF_ACCOUNT }}" "${{ secrets.SF_USER }}" "$RUNNER_TEMP/key.p8" > ~/.snowflake/connections.toml
+          echo "${{ secrets.SF_PRIVATE_KEY }}" > "$RUNNER_TEMP/key.p8"
+          chmod 600 ~/.snowflake/connections.toml "$RUNNER_TEMP/key.p8"
+      - run: icebackup --connection ci apply --env ${{ inputs.env }}

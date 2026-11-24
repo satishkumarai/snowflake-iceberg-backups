@@ -1,0 +1,5 @@
+env: stg
+allow_retention_lock: false
+tiers:
+  regulated: {retention_lock: false}
+targets: []

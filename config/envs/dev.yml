@@ -1,0 +1,10 @@
+env: dev
+allow_retention_lock: false
+tiers:
+  gold: {expire_after_days: 2}
+  silver: {expire_after_days: 3}
+  regulated: {expire_after_days: 1, retention_lock: false}
+targets:
+  - {name: LAB_SCHEMA_BS, kind: SCHEMA, object: ICEBERG_BACKUP_LAB.CORE, tier: gold}
+  - {name: LAB_ORDERS_BS, kind: ICEBERG TABLE, object: ICEBERG_BACKUP_LAB.CORE.ORDERS_ICE, tier: silver}
+  - {name: LAB_ORDERS_DT_BS, kind: DYNAMIC ICEBERG TABLE, object: ICEBERG_BACKUP_LAB.CORE.ORDERS_DAILY_DIT, tier: silver}

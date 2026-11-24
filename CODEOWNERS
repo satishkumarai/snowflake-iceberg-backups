@@ -1,0 +1,4 @@
+*                                   @org/snowflake-platform
+/sql/20_policies/regulated_lock.sql @org/snowflake-platform @org/security @org/compliance
+/sql/10_rbac/                       @org/snowflake-platform @org/security
+/config/envs/prod.yml               @org/snowflake-platform @org/security

@@ -1,0 +1,21 @@
+# Backup tiers. schedule_minutes >= 60. expire_after_days required unless managed manually.
+admin:
+  database: BACKUP_ADMIN          # dedicated DB: replicate on its own cadence (ADR-0003)
+  schema: POLICIES
+  warehouse: BACKUP_OPS_WH
+replication_refresh_minutes: 60   # expiry must exceed this (guard)
+tiers:
+  gold:
+    schedule_minutes: 60
+    expire_after_days: 35
+    retention_lock: false
+  silver:
+    schedule_minutes: 1440
+    expire_after_days: 90
+    retention_lock: false
+  regulated:
+    schedule_minutes: 1440
+    expire_after_days: 2557       # ~7 years. IRREVERSIBLE once applied (ADR-0002)
+    retention_lock: true
+# targets: kind in {ICEBERG TABLE, DYNAMIC ICEBERG TABLE, SCHEMA, DATABASE}
+targets: []

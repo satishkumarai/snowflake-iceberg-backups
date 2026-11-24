@@ -1,0 +1,26 @@
+[project]
+name = "icebackup"
+version = "0.1.0"
+description = "Guarded management of Snowflake Backups for Snowflake-managed Iceberg tables"
+requires-python = ">=3.10"
+dependencies = ["pyyaml>=6", "snowflake-snowpark-python>=1.20"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5", "sqlfluff>=3"]
+
+[project.scripts]
+icebackup = "icebackup.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 110
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit"]
+markers = ["integration: requires a live Snowflake connection"]
